@@ -1,0 +1,280 @@
+openapi: "3.0.3"
+info:
+  title: "Product RESTful API"
+  version: "1.0.0"
+  description: "API Spec for Product RESTful API"
+servers:
+  - url: "http://localhost:8080/api"
+    description: "Local server"
+paths:
+  /products:
+    get:
+      security:
+        - APIAuthKey: []
+      tags:
+        - "Product"
+      summary: "Get all products"
+      description: "Returns a list of products"
+      responses:
+        "200":
+          description: "Success get all products"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessGetAllProducts"
+              examples:
+                SuccessGetAllProducts:
+                  $ref: "#/components/examples/SuccessGetAllProducts"
+    post:
+      security:
+        - APIAuthKey: []
+      tags:
+        - "Product"
+      summary: "Create a new product"
+      description: "Create a new product"
+      requestBody:
+        required: true
+        description: "Product object that needs to be added to the store"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProduct"
+            examples:
+              Laptop:
+                $ref: "#/components/examples/CreateProductLaptop"
+              Smartphone:
+                $ref: "#/components/examples/CreateProductSmartphone"
+      responses:
+        "201":
+          description: "Success create a new product"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessCreateUpdateProduct"
+              examples:
+                Laptop:
+                  $ref: "#/components/examples/SuccessCreateProductLaptop"
+                Smartphone:
+                  $ref: "#/components/examples/SuccessCreateProductSmartphone"
+  /products/{id}:
+    get:
+      security:
+        - APIAuthKey: []
+      summary: "Get product by id"
+      tags:
+        - "Product"
+      description: "Returns a single product by id"
+      parameters:
+        - $ref: "#/components/parameters/CategoryId"
+      responses:
+        "200":
+          description: "Success get product by id"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessCreateUpdateProduct"
+              examples:
+                Laptop:
+                  $ref: "#/components/examples/SuccessGetSingleProductLaptop"
+                Smartphone:
+                  $ref: "#/components/examples/SuccessGetSingleProductSmartphone"
+    put:
+      security:
+        - APIAuthKey: []
+      summary: "Update product by id"
+      tags:
+        - "Product"
+      description: "Update product by id"
+      parameters:
+        - $ref: "#/components/parameters/CategoryId"
+      requestBody:
+        required: true
+        description: "Product object that needs to be updated"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProduct"
+            examples:
+              Laptop:
+                $ref: "#/components/examples/CreateProductLaptop"
+              Smartphone:
+                $ref: "#/components/examples/CreateProductSmartphone"
+      responses:
+        "200":
+          description: "Success update product by id"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessCreateUpdateProduct"
+              examples:
+                Laptop:
+                  $ref: "#/components/examples/SuccessCreateProductLaptop"
+                Smartphone:
+                  $ref: "#/components/examples/SuccessCreateProductSmartphone"
+    delete:
+      security:
+        - APIAuthKey: []
+      summary: "Delete product by id"
+      tags:
+        - "Product"
+      description: "Delete product by id"
+      parameters:
+        - $ref: "#/components/parameters/CategoryId"
+      responses:
+        "200":
+          description: "Success delete product by id"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessDeleteProduct"
+
+components:
+  examples:
+    Smartphone:
+      value:
+        id: 2
+        name: "Smartphone"
+        description: "Smartphone description"
+        created_at: "2021-01-01T00:00:00Z"
+        updated_at: "2021-01-01T00:00:00Z"
+    SuccessCreateProductSmartphone:
+      value:
+        code: 201
+        status: "Created"
+        data:
+          id: 2
+          name: "Smartphone"
+          description: "Smartphone description"
+          created_at: "2021-01-01T00:00:00Z"
+          updated_at: "2021-01-01T00:00:00Z"
+    SuccessGetSingleProductLaptop:
+      value:
+        code: 200
+        status: "OK"
+        data:
+          id: 1
+          name: "Laptop"
+          description: "Laptop description"
+          created_at: "2021-01-01T00:00:00Z"
+          updated_at: "2021-01-01T00:00:00Z"
+    SuccessGetSingleProductSmartphone:
+      value:
+        code: 200
+        status: "OK"
+        data:
+          id: 2
+          name: "Smartphone"
+          description: "Smartphone description"
+          created_at: "2021-01-01T00:00:00Z"
+          updated_at: "2021-01-01T00:00:00Z"
+    SuccessCreateProductLaptop:
+      value:
+        code: 201
+        status: "Created"
+        data:
+          id: 1
+          name: "Laptop"
+          description: "Laptop description"
+          created_at: "2021-01-01T00:00:00Z"
+          updated_at: "2021-01-01T00:00:00Z"
+    CreateProductLaptop:
+      value:
+        name: "Laptop"
+        description: "Laptop description"
+    CreateProductSmartphone:
+      value:
+        name: "Smartphone"
+        description: "Smartphone description"
+    SuccessGetAllProducts:
+      value:
+        code: 200
+        status: "OK"
+        data:
+          - id: 1
+            name: "Laptop"
+            description: "Laptop description"
+            created_at: "2021-01-01T00:00:00Z"
+            updated_at: "2021-01-01T00:00:00Z"
+          - id: 2
+            name: "Smartphone"
+            description: "Smartphone description"
+            created_at: "2021-01-01T00:00:00Z"
+            updated_at: "2021-01-01T00:00:00Z"
+  schemas:
+    SuccessGetAllProducts:
+      type: "object"
+      properties:
+        code:
+          type: "integer"
+        status:
+          type: "string"
+        data:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Product"
+    Product:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+        name:
+          type: "string"
+        description:
+          type: "string"
+        created_at:
+          type: "string"
+        updated_at:
+          type: "string"
+    SuccessCreateUpdateProduct:
+      type: "object"
+      properties:
+        code:
+          type: "integer"
+        status:
+          type: "string"
+        data:
+          $ref: "#/components/schemas/Product"
+    SuccessDeleteProduct:
+      type: "object"
+      properties:
+        code:
+          type: "integer"
+          example: 200
+        status:
+          type: "string"
+          example: "OK"
+        data:
+          type: "object"
+          example: {}
+
+    CreateProduct:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+          minLength: 1
+        description:
+          minLength: 1
+          type: "string"
+      required:
+        - "name"
+        - "description"
+  parameters:
+    CategoryId:
+      name: "id"
+      in: "path"
+      description: "ID of products"
+      required: true
+      schema:
+        type: "integer"
+      examples:
+        Laptop:
+          value: 1
+        Smartphone:
+          value: 2
+  securitySchemes:
+    APIAuthKey:
+      type: apiKey
+      in: header
+      name: "X-API-KEY"
+      description: "Authentication key"
